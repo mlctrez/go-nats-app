@@ -25,7 +25,7 @@ connection [Client Protocol](https://docs.nats.io/reference/reference-protocols/
 
 `Go-App -> Nats Client -> <Nats WebSocket> -> <WebSocket Handler> -> Nats Endpoint`
 
-This allows publishing the nats client endpoint as a websocket.
+This allows the nats websocket endpoint to be on the same host:port where the go-app is served.
 The client nats connection and underlying websocket are managed as a go-app [component](goapp/compo/nats).
 
 Incrementing the echo counter in the original was replaced with a client http get to `/echo/username`.
@@ -39,7 +39,10 @@ Interestingly, this led to the discovery of the nats client connection option `n
     * In this small demo, no issues were encountered. Maybe it is not applicable.
 * [WebSocket Handler](api/api.go#L94) definitely needs to cover a few more error / connect / reconnect / disconnect
   cases.
- 
+* As pointed out, this seems like a bit like re-inventing the wheel.
+    * This is not intended to replace the built-in nats websocket client with all of its fail over / cluster
+      capabilities. Use that if that's needed.
+     
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/mlctrez/go-nats-app)](https://goreportcard.com/report/github.com/mlctrez/go-nats-app)
 
