@@ -4,7 +4,7 @@ A spin-off of [go-nats-app](https://github.com/oderwat/go-nats-app/). See the re
 
 Credit to [Hans](https://github.com/oderwat/) for the original and sending me on this journey.
 
-Most of the original code is in [setupNatsApi](api/api.go#:~:text=setupNatsApiDocLink) for the server
+Most of the original code is in [setupNatsApi](api/api.go#L43) for the server
 and [front.go](goapp/compo/front/front.go) for the client. Nats server setup is
 in [service.go](goapp/service/service.go#L222).
 
