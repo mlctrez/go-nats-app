@@ -17,7 +17,6 @@ import (
 	"net/http"
 	"net/url"
 	"nhooyr.io/websocket"
-	"reflect"
 	"strings"
 )
 
@@ -141,8 +140,6 @@ func (a *Api) webSocketHandler(ginCtx *gin.Context) {
 		var readErr error
 		for {
 			if _, bytes, readErr = conn.Read(ctx); readErr != nil {
-
-				fmt.Println(reflect.TypeOf(readErr).String())
 				// when user closes window, websocket sends this status
 				if strings.Contains(readErr.Error(), "status = StatusGoingAway") {
 					break
