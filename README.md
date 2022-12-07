@@ -14,7 +14,7 @@ In the original code, the nats client in the wasm connects to the nats server
 using a [Nats Websocket](https://docs.nats.io/running-a-nats-service/configuration/websocket) via
 a [CustomDialer](https://github.com/nats-io/nats.go/blob/6c6add8d63597f84bee75d37bb1520e01552a02d/nats.go#L252).
 
-`Go-App -> Nats Client -> <Nats WebSocket> -> WebSocket Endpoint of Nats server`
+`Go-App -> Nats Client -> <Nats WebSocket> -> WebSocket Endpoint`
 
 In the spin-off, the nats client in the wasm connects using
 a [CustomDialer](https://github.com/nats-io/nats.go/blob/6c6add8d63597f84bee75d37bb1520e01552a02d/nats.go#L252) again,
@@ -23,14 +23,13 @@ but the connection is to a [WebSocket Handler](api/api.go#L94).
 This handler adapts the websocket binary payloads to the standard Nats tcp
 connection [Client Protocol](https://docs.nats.io/reference/reference-protocols/nats-protocol).
 
-`Go-App -> Nats Client -> <Nats WebSocket Protocol> -> <WebSocket Handler> -> Nats Endpoint of Nats server`
+`Go-App -> Nats Client -> <Nats WebSocket> -> <WebSocket Handler> -> Nats Endpoint`
 
 This allows publishing the nats client endpoint as a websocket.
-The client nats connection and underlying websocket are managed in the [nats app.Compo](goapp/compo/nats) as a
-component.
+The client nats connection and underlying websocket are managed as a go-app [component](goapp/compo/nats).
 
-Invoking the echo service in-browser from the original was replaced with a client http get to the `/echo/username` endpoint.
-Interestingly this to the discovery of the nats client connection option `nats.InProcessServer`. Neat.
+Incrementing the echo counter in the original was replaced with a client http get to `/echo/username`.
+Interestingly, this led to the discovery of the nats client connection option `nats.InProcessServer`. Neat.
 
 ### Disclaimers
 
