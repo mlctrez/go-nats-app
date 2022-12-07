@@ -42,6 +42,8 @@ func (a *Api) Register(engine *gin.Engine) {
 
 func (a *Api) setupNatsApi() {
 
+	// setupNatsApiDocLink
+
 	var err error
 	a.serverConn, err = nats.Connect("", nats.InProcessServer(a.ns))
 	if err != nil {
