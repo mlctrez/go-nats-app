@@ -4,7 +4,7 @@ A spin-off of [go-nats-app](https://github.com/oderwat/go-nats-app/). See the re
 
 Credit to [Hans](https://github.com/oderwat/) for the original and sending me on this journey.
 
-Most of the original code is in [setupNatsApi](api/api.go#L43) for the server
+Most of the original code is in [setupNatsApi](api/api.go#L41) for the server
 and [front.go](goapp/compo/front/front.go) for the client. Nats server setup is
 in [service.go](goapp/service/service.go#L222).
 
@@ -16,33 +16,25 @@ a [CustomDialer](https://github.com/nats-io/nats.go/blob/6c6add8d63597f84bee75d3
 
 `Go-App -> Nats Client -> <Nats WebSocket> -> WebSocket Endpoint`
 
-In the spin-off, the nats client in the wasm connects using
-a [CustomDialer](https://github.com/nats-io/nats.go/blob/6c6add8d63597f84bee75d37bb1520e01552a02d/nats.go#L252) again,
-but the connection is to a [WebSocket Handler](api/api.go#L94).
+In the (now updated) spin-off, the nats client in the wasm connects using [goapp-natsws](https://github.com/mlctrez/goapp-natsws).
 
-This handler adapts the websocket binary payloads to the standard Nats tcp
-connection [Client Protocol](https://docs.nats.io/reference/reference-protocols/nats-protocol).
+`Go-App -> Nats Client -> <natsws.Connection> -> <natsws.Proxy> -> WebSocket Endpoint`
 
-`Go-App -> Nats Client -> <Nats WebSocket> -> <WebSocket Handler> -> Nats Endpoint`
-
-This allows the nats websocket endpoint to be on the same host:port where the go-app is served.
-The client nats connection and underlying websocket are managed as a go-app [component](goapp/compo/nats).
+This allows the nats communication to be on the same host:port where the go-app is served.
 
 Incrementing the echo counter in the original was replaced with a client http get to `/echo/username`.
-Interestingly, this led to the discovery of the nats client connection option `nats.InProcessServer`. Neat.
+
+Interestingly, this led to the discovery of the nats client connection option `nats.InProcessServer`.
+
+A disconnect test was added to simulate the backend disconnecting the websocket.
 
 ### Disclaimers
 
-* Not fully tested, not production ready, no warranty, no support, etc.
-* The note [here](https://docs.nats.io/running-a-nats-service/configuration/websocket) for writers of client libraries:
-    * "Any data from a frame must be going through a parser that can handle partial protocols".
-    * In this small demo, no issues were encountered. Maybe it is not applicable.
-* [WebSocket Handler](api/api.go#L94) definitely needs to cover a few more error / connect / reconnect / disconnect
-  cases.
+* See readme in [goapp-natsws](https://github.com/mlctrez/goapp-natsws)
 * As pointed out, this seems like a bit like re-inventing the wheel.
     * This is not intended to replace the built-in nats websocket client with all of its fail over / cluster
-      capabilities. Use that if that's needed.
-     
+      capabilities. 
+    * Use the default nats client if that's needed.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/mlctrez/go-nats-app)](https://goreportcard.com/report/github.com/mlctrez/go-nats-app)
 
