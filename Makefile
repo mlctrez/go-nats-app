@@ -8,7 +8,7 @@ LD_FLAGS="-w -X $(MODULE)/goapp.Version=$(VERSION) -X $(MODULE)/goapp.Commit=$(C
 MAIN="goapp/service/main/main.go"
 
 run: binary
-	@DEV=1 ADDRESS=10.0.0.41:9021 ./temp/$(APP_NAME)
+	@DEV=1 ./temp/$(APP_NAME)
 
 binary: wasm
 	@mkdir -p temp
